@@ -1,0 +1,6 @@
+#!/usr/bin/dh-exec
+[linux-any] usr/lib/systemd/user
+[linux-any] usr/bin
+[linux-any] usr/libexec/gcr-ssh-agent
+usr/libexec/gcr4-ssh-askpass
+usr/share/locale
