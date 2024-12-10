@@ -1,0 +1,6 @@
+usr/include/gcr-4
+usr/lib/*/libgcr-4.so
+usr/lib/*/pkgconfig/gcr-4.pc
+usr/share/gir-1.0/Gcr-4.gir
+usr/share/vala/vapi/gcr-4.deps
+usr/share/vala/vapi/gcr-4.vapi

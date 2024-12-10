@@ -1,15 +1,169 @@
-Source: template-repository
-Section: unknown
+Source: gcr4
+Section: gnome
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Uploaders: Emilio Pozuelo Monfort <pochu@debian.org>, Iain Lane <laney@debian.org>, Jeremy Bícha <jbicha@ubuntu.com>, Laurent Bigonville <bigon@debian.org>, Marco Trevisan (Treviño) <marco@ubuntu.com>
+Build-Depends: dbus <!nocheck>,
+               debhelper-compat (= 13),
+               dh-exec,
+               dh-sequence-gir,
+               dh-sequence-gnome,
+               docbook-xml,
+               gi-docgen,
+               gir1.2-gio-2.0-dev,
+               gir1.2-gobject-2.0-dev,
+               gnupg,
+               gobject-introspection (>= 1.78.1-9~),
+               libdbus-1-dev (>= 1.0),
+               libgcrypt20-dev (>= 1.4.5),
+               libglib2.0-dev (>= 2.44.0),
+               libgtk-4-dev,
+               libp11-kit-dev (>= 0.19.0),
+               libsecret-1-dev (>= 0.20) [linux-any],
+               libsystemd-dev [linux-any],
+               libtasn1-6-dev,
+               libtasn1-bin,
+               meson (>= 0.52),
+               openssh-client,
+               systemd-dev [linux-any],
+               valac,
+               xsltproc
+Build-Depends-Indep: libglib2.0-doc <!nodoc>, libgtk-4-doc <!nodoc>
+Rules-Requires-Root: no
+Standards-Version: 4.7.0
+Vcs-Browser: https://salsa.debian.org/gnome-team/gcr4
+Vcs-Git: https://salsa.debian.org/gnome-team/gcr4.git
+Homepage: https://wiki.gnome.org/Projects/GnomeKeyring
 
-Package: template-repository
+Package: gcr4
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Depends: default-dbus-session-bus | dbus-session-bus,
+         gcr,
+         libgcr-4-4 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Breaks: gcr (<< 3.41.1-5~)
+Replaces: gcr (<< 3.41.1-5~)
+Description: GNOME crypto services (daemon and tools)
+ GCR is a library for crypto UI and related tasks.
+ .
+ This package contains the certificate viewer and prompter service.
+
+Package: libgck-2-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: gir1.2-gck-2 (= ${binary:Version}),
+         libgck-2-2 (= ${binary:Version}),
+         libglib2.0-dev (>= 2.44.0),
+         libp11-kit-dev (>= 0.19.0),
+         ${gir:Depends},
+         ${misc:Depends}
+Provides: ${gir:Provides}
+Suggests: libgck-2-doc
+Description: GLib wrapper library for PKCS#11 - development
+ GCK is a wrapper based on GLib implementing the PKCS#11 (Cryptoki)
+ interface.
+ .
+ This package contains the static libraries, header files and
+ documentation needed to build applications using the GCK library.
+
+Package: libgck-2-doc
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Suggests: devhelp
+Build-Profiles: <!nodoc>
+Description: GLib wrapper library for PKCS#11 - documentation
+ GCK is a wrapper based on GLib implementing the PKCS#11 (Cryptoki)
+ interface.
+ .
+ This package contains the API documentation for the GCK library.
+
+Package: libgck-2-2
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Description: Glib wrapper library for PKCS#11 - runtime
+ GCK is a wrapper based on GLib implementing the PKCS#11 (Cryptoki)
+ interface.
+ .
+ This package contains the shared libraries needed to run programs
+ built against the GCK library.
+
+Package: gir1.2-gck-2
+Architecture: any
+Multi-Arch: same
+Section: introspection
+Depends: libgck-2-2 (= ${binary:Version}),
+         ${gir:Depends},
+         ${misc:Depends}
+Provides: ${gir:Provides}
+Description: GObject introspection data for the GCK library
+ This package contains introspection data for GCK, a wrapper based on GLib
+ implementing the PKCS#11 (Cryptoki) interface.
+ .
+ It can be used by interpreters understanding the GIRepository format to
+ write programs using the GCK library.
+
+Package: libgcr-4-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: gir1.2-gcr-4 (= ${binary:Version}),
+         libgck-2-dev (= ${binary:Version}),
+         libgcr-4-4 (= ${binary:Version}),
+         libglib2.0-dev,
+         libp11-kit-dev,
+         ${gir:Depends},
+         ${misc:Depends}
+Provides: ${gir:Provides}
+Suggests: libgcr-4-doc
+Description: Library for Crypto UI related tasks - development
+ GCR is a library for crypto UI and related tasks.
+ .
+ This package contains the static libraries, header files and
+ documentation needed to build applications using the GCR library.
+
+Package: libgcr-4-doc
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Suggests: devhelp
+Build-Profiles: <!nodoc>
+Description: Library for Crypto UI related tasks - documentation
+ GCR is a library for crypto UI and related tasks.
+ .
+ This package contains the API documentation for the GCR library.
+
+Package: libgcr-4-4
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: libgck-2-2 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Library for Crypto related tasks
+ GCR is a library for crypto UI and related tasks.
+ .
+ This package contains the GObject library for high level crypto
+ parsing.
+
+Package: gir1.2-gcr-4
+Architecture: any
+Multi-Arch: same
+Section: introspection
+Depends: libgcr-4-4 (= ${binary:Version}),
+         ${gir:Depends},
+         ${misc:Depends}
+Provides: ${gir:Provides}
+Description: GObject introspection data for the GCR library
+ This package contains introspection data for GCR, a library for crypto UI
+ and related tasks.
+ .
+ It can be used by interpreters understanding the GIRepository format to
+ write programs using the GCR library.
