@@ -1,0 +1,12 @@
+Tests: libgck-2-dev
+Depends: build-essential,
+         libgck-2-dev,
+         pkg-config,
+Restrictions: allow-stderr superficial
+
+Tests: libgcr-4-dev
+Depends: build-essential,
+         dbus,
+         libgcr-4-dev,
+         pkg-config,
+Restrictions: allow-stderr superficial
