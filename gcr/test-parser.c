@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "egg/egg-error.h"
+#include "egg/egg-fips.h"
 #include "egg/egg-secure-memory.h"
 #include "egg/egg-testing.h"
 
@@ -32,7 +33,6 @@
 #include "gck/gck.h"
 
 #include <glib.h>
-#include <gcrypt.h>
 
 #include <errno.h>
 #include <stdlib.h>
@@ -335,6 +335,7 @@ main (int argc, char **argv)
 	gchar *lower;
 	gchar *test;
 	int ret;
+	EggFipsMode fips_mode;
 
 	g_test_init (&argc, &argv, NULL);
 	g_set_prgname ("test-parser");
@@ -343,6 +344,8 @@ main (int argc, char **argv)
 	dir = g_dir_open (SRCDIR "/gcr/fixtures", 0, &error);
 	g_assert_no_error (error);
 
+	fips_mode = egg_fips_get_mode ();
+
 	for (;;) {
 		filename = g_dir_read_name (dir);
 		if (!filename)
@@ -350,6 +353,30 @@ main (int argc, char **argv)
 		if (filename[0] == '.')
 			continue;
 
+		if (fips_mode &&
+		    (g_str_equal (filename, "der-key-PBE-MD5-DES.p8") ||
+		     g_str_equal (filename, "der-key-PBE-SHA1-3DES.p8") ||
+		     g_str_equal (filename, "der-key-PBE-SHA1-DES.p8") ||
+		     g_str_equal (filename, "der-key-PBE-SHA1-RC2-40.p8") ||
+		     g_str_equal (filename, "der-key-PBE-SHA1-RC4-128.p8") ||
+		     g_str_equal (filename, "der-key-encrypted-pkcs5.p8") ||
+		     g_str_equal (filename, "der-key-v2-des.p8") ||
+		     g_str_equal (filename, "der-key-v2-des3.p8") ||
+		     g_str_equal (filename, "email.p12") ||
+		     g_str_equal (filename, "pem-pkcs8.key") ||
+		     g_str_equal (filename, "pem-rsa-enc.key") ||
+		     g_str_equal (filename, "personal.p12") ||
+		     g_str_equal (filename, "unclient.p12") ||
+		     g_str_equal (filename, "usr0052-firefox.p12")))
+			continue;
+
+#ifdef WITH_GNUTLS
+#if GNUTLS_VERSION_NUMBER < 0x030805
+		/* Not yet supported in GnuTLS */
+		if (g_str_equal (filename, "der-key-PBE-SHA1-DES.p8"))
+			continue;
+#endif
+#endif
 		path = g_build_filename (SRCDIR "/gcr/fixtures", filename, NULL);
 
 		if (g_file_test (path, G_FILE_TEST_IS_DIR)) {

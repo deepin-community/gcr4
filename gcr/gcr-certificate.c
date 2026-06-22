@@ -20,12 +20,14 @@
 #include "config.h"
 
 #include "gcr-certificate.h"
-#include "gcr-certificate-extensions.h"
+#include "gcr-certificate-extension-private.h"
+#include "gcr-certificate-extension-list-private.h"
+#include "gcr-certificate-extensions-private.h"
 #include "gcr-certificate-field.h"
 #include "gcr-certificate-field-private.h"
 #include "gcr-fingerprint.h"
 #include "gcr-internal.h"
-#include "gcr-subject-public-key.h"
+#include "gcr-subject-public-key-info-private.h"
 
 #include "gcr/gcr-oids.h"
 
@@ -55,7 +57,7 @@
  *
  * The #GcrCertificate interface has several properties that must be implemented.
  * You can use a mixin to implement these properties if desired. See the
- * gcr_certificate_mixin_class_init() and gcr_certificate_mixin_get_property()
+ * [func@Certificate.mixin_class_init] and [func@Certificate.mixin_get_property]
  * functions.
  */
 
@@ -79,16 +81,18 @@
  */
 
 typedef struct _GcrCertificateInfo {
-	gconstpointer der;
-	gsize n_der;
+	const void *der;
+	size_t n_der;
 	GNode *asn1;
-	guint key_size;
+	GcrSubjectPublicKeyInfo *spki;
 } GcrCertificateInfo;
 
 /* Forward declarations */
 
 static GBytes * _gcr_certificate_get_subject_const (GcrCertificate *self);
 static GBytes * _gcr_certificate_get_issuer_const (GcrCertificate *self);
+static GcrCertificateExtension * _gcr_certificate_find_extension (GNode *cert,
+                                                                  GQuark oid);
 
 enum {
 	PROP_FIRST = 0x0007000,
@@ -110,6 +114,8 @@ certificate_info_free (gpointer data)
 {
 	GcrCertificateInfo *info = data;
 	if (info) {
+		if (info->spki)
+			gcr_subject_public_key_info_free (info->spki);
 		g_assert (info->asn1);
 		egg_asn1x_destroy (info->asn1);
 		g_free (info);
@@ -649,6 +655,36 @@ gcr_certificate_get_expiry_date (GcrCertificate *self)
 }
 
 /**
+ * gcr_certificate_get_public_key_info:
+ * @self: a #GcrCertificate
+ *
+ * Returns the subject public key info (SPKI) of the certificate.
+ *
+ * Returns: (transfer none): The SPKI of the certificate.
+ */
+GcrSubjectPublicKeyInfo *
+gcr_certificate_get_public_key_info (GcrCertificate *self)
+{
+	GcrCertificateInfo *info;
+
+	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), NULL);
+
+	info = certificate_info_load (self);
+	if (info == NULL)
+		return NULL;
+
+	if (info->spki == NULL) {
+		GNode *node;
+
+		node = egg_asn1x_node (info->asn1, "tbsCertificate",
+	                               "subjectPublicKeyInfo", NULL);
+		info->spki = _gcr_subject_public_key_info_new (node);
+	}
+
+	return info->spki;
+}
+
+/**
  * gcr_certificate_get_key_size:
  * @self: a #GcrCertificate
  *
@@ -661,7 +697,6 @@ guint
 gcr_certificate_get_key_size (GcrCertificate *self)
 {
 	GcrCertificateInfo *info;
-	GNode *subject_public_key;
 
 	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), 0);
 
@@ -669,13 +704,15 @@ gcr_certificate_get_key_size (GcrCertificate *self)
 	if (info == NULL)
 		return 0;
 
-	if (!info->key_size) {
-		subject_public_key = egg_asn1x_node (info->asn1, "tbsCertificate",
-		                                     "subjectPublicKeyInfo", NULL);
-		info->key_size = _gcr_subject_public_key_calculate_size (subject_public_key);
+	if (info->spki == NULL) {
+		GNode *node;
+
+		node = egg_asn1x_node (info->asn1, "tbsCertificate",
+	                               "subjectPublicKeyInfo", NULL);
+		info->spki = _gcr_subject_public_key_info_new (node);
 	}
 
-	return info->key_size;
+	return gcr_subject_public_key_info_get_key_size (info->spki);
 }
 
 /**
@@ -754,6 +791,37 @@ gcr_certificate_get_fingerprint_hex (GcrCertificate *self, GChecksumType type)
 	g_checksum_free (sum);
 	g_free (digest);
 	return hex;
+}
+
+/**
+ * gcr_certificate_get_version:
+ * @self: a #GcrCertificate
+ *
+ * Get the version of the X.509 certificate.
+ *
+ * Returns: the version of the certificate
+ */
+gulong
+gcr_certificate_get_version (GcrCertificate *self)
+{
+	GcrCertificateInfo *info;
+	GNode *version_node;
+	gulong version;
+
+	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), 0);
+
+	info = certificate_info_load (self);
+	if (info == NULL)
+		return 0;
+
+	version_node = egg_asn1x_node (info->asn1, "tbsCertificate", "version", NULL);
+	if (!egg_asn1x_get_integer_as_ulong (version_node, &version)) {
+		/* By default, version is 0 if missing */
+		version = 0;
+	}
+
+	/* v1 is denoted by value 0, v2 by value 1, etc */
+	return version + 1;
 }
 
 /**
@@ -841,7 +909,8 @@ gcr_certificate_get_basic_constraints (GcrCertificate *self,
                                        gint *path_len)
 {
 	GcrCertificateInfo *info;
-	GBytes *value;
+	GcrCertificateExtension *extension;
+	GcrCertificateExtensionBasicConstraints *bc_extension;
 
 	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), FALSE);
 
@@ -849,14 +918,19 @@ gcr_certificate_get_basic_constraints (GcrCertificate *self,
 	if (info == NULL)
 		return FALSE;
 
-	value = _gcr_certificate_extension_find (info->asn1, GCR_OID_BASIC_CONSTRAINTS, NULL);
-	if (!value)
+	extension = _gcr_certificate_find_extension (info->asn1, GCR_OID_BASIC_CONSTRAINTS);
+	if (extension == NULL)
 		return FALSE;
 
-	if (!_gcr_certificate_extension_basic_constraints (value, is_ca, path_len))
+	if (!GCR_IS_CERTIFICATE_EXTENSION_BASIC_CONSTRAINTS (extension))
 		g_return_val_if_reached (FALSE);
 
-	g_bytes_unref (value);
+	bc_extension = (GcrCertificateExtensionBasicConstraints *) extension;
+	if (is_ca != NULL)
+		*is_ca = gcr_certificate_extension_basic_constraints_is_ca (bc_extension);
+	if (path_len != NULL)
+		*path_len = gcr_certificate_extension_basic_constraints_get_path_len_constraint (bc_extension);
+	g_object_unref (extension);
 	return TRUE;
 }
 
@@ -910,19 +984,18 @@ append_subject_public_key (GcrCertificate        *self,
 }
 
 static GcrCertificateSection *
-append_extension_basic_constraints (GBytes *data)
+append_extension_basic_constraints (GcrCertificateExtensionBasicConstraints *extension)
 {
 	GcrCertificateSection *section;
 	gboolean is_ca = FALSE;
 	gint path_len = -1;
 	gchar *number;
 
-	if (!_gcr_certificate_extension_basic_constraints (data, &is_ca, &path_len))
-		return NULL;
-
 	section = _gcr_certificate_section_new (_("Basic Constraints"), FALSE);
+	is_ca = gcr_certificate_extension_basic_constraints_is_ca (extension);
 	_gcr_certificate_section_new_field (section, _("Certificate Authority"), is_ca ? _("Yes") : _("No"));
 
+	path_len = gcr_certificate_extension_basic_constraints_get_path_len_constraint (extension);
 	if (path_len < 0)
 		number = g_strdup (_("Unlimited"));
 	else
@@ -934,113 +1007,189 @@ append_extension_basic_constraints (GBytes *data)
 }
 
 static GcrCertificateSection *
-append_extension_extended_key_usage (GBytes *data)
+append_extension_extended_key_usage (GcrCertificateExtensionExtendedKeyUsage *extension)
 {
 	GcrCertificateSection *section;
-	GQuark *oids;
-	GStrvBuilder *text;
-	guint i;
-
-	oids = _gcr_certificate_extension_extended_key_usage (data);
-	if (!oids)
-		return NULL;
-
-	text = g_strv_builder_new ();
-	for (i = 0; oids[i] != 0; i++) {
-		g_strv_builder_add (text, egg_oid_get_description (oids[i]));
-	}
-
-	g_free (oids);
+	GStrv descriptions;
 
 	section = _gcr_certificate_section_new (_("Extended Key Usage"), FALSE);
-	_gcr_certificate_section_new_field_take_values (section, _("Allowed Purposes"), g_strv_builder_end (text));
-	g_strv_builder_unref (text);
+
+	descriptions = gcr_certificate_extension_extended_key_usage_get_descriptions (extension);
+	_gcr_certificate_section_new_field_take_values (section, _("Allowed Purposes"), descriptions);
 
 	return section;
 }
 
 static GcrCertificateSection *
-append_extension_subject_key_identifier (GBytes *data)
+append_extension_subject_key_identifier (GcrCertificateExtensionSubjectKeyIdentifier *extension)
 {
 	GcrCertificateSection *section;
-	gpointer keyid;
-	gsize n_keyid;
-
-	keyid = _gcr_certificate_extension_subject_key_identifier (data, &n_keyid);
-	if (!keyid)
-		return NULL;
+	GBytes *keyid;
+	const void *keyid_data;
+	size_t keyid_len;
+	char *display;
 
 	section = _gcr_certificate_section_new (_("Subject Key Identifier"), FALSE);
-	gchar *display = egg_hex_encode_full (keyid, n_keyid, TRUE, " ", 1);
-	g_free (keyid);
+	keyid = gcr_certificate_extension_subject_key_identifier_get_key_id (extension);
+	keyid_data = g_bytes_get_data (keyid, &keyid_len);
+	display = egg_hex_encode_full (keyid_data, keyid_len, TRUE, " ", 1);
 	_gcr_certificate_section_new_field_take_value (section, _("Key Identifier"), g_steal_pointer (&display));
 
 	return section;
 }
 
-static const struct {
-	guint usage;
-	const gchar *description;
-} usage_descriptions[] = {
-	{ GCR_KEY_USAGE_DIGITAL_SIGNATURE, N_("Digital signature") },
-	{ GCR_KEY_USAGE_NON_REPUDIATION, N_("Non repudiation") },
-	{ GCR_KEY_USAGE_KEY_ENCIPHERMENT, N_("Key encipherment") },
-	{ GCR_KEY_USAGE_DATA_ENCIPHERMENT, N_("Data encipherment") },
-	{ GCR_KEY_USAGE_KEY_AGREEMENT, N_("Key agreement") },
-	{ GCR_KEY_USAGE_KEY_CERT_SIGN, N_("Certificate signature") },
-	{ GCR_KEY_USAGE_CRL_SIGN, N_("Revocation list signature") },
-	{ GCR_KEY_USAGE_ENCIPHER_ONLY, N_("Encipher only") },
-	{ GCR_KEY_USAGE_DECIPHER_ONLY, N_("Decipher only") }
-};
-
 static GcrCertificateSection *
-append_extension_key_usage (GBytes *data)
+append_extension_authority_key_identifier (GcrCertificateExtensionAuthorityKeyIdentifier *extension)
 {
 	GcrCertificateSection *section;
-	gulong key_usage;
-	GStrvBuilder *values;
-	guint i;
+	GBytes *keyid;
+	const void *keyid_data;
+	size_t keyid_len;
+	char *display;
 
-	if (!_gcr_certificate_extension_key_usage (data, &key_usage))
-		return NULL;
-
-	values = g_strv_builder_new ();
-	for (i = 0; i < G_N_ELEMENTS (usage_descriptions); i++) {
-		if (key_usage & usage_descriptions[i].usage) {
-			g_strv_builder_add (values, _(usage_descriptions[i].description));
-		}
-	}
-
-	section = _gcr_certificate_section_new (_("Key Usage"), FALSE);
-	_gcr_certificate_section_new_field_take_values (section, _("Usages"), g_strv_builder_end (values));
-	g_strv_builder_unref (values);
+	section = _gcr_certificate_section_new (egg_oid_get_description (GCR_OID_AUTHORITY_KEY_IDENTIFIER), FALSE);
+	keyid = gcr_certificate_extension_authority_key_identifier_get_key_id (extension);
+	keyid_data = g_bytes_get_data (keyid, &keyid_len);
+	display = egg_hex_encode_full (keyid_data, keyid_len, TRUE, " ", 1);
+	_gcr_certificate_section_new_field_take_value (section, _("Key Identifier"), g_steal_pointer (&display));
 
 	return section;
 }
 
 static GcrCertificateSection *
-append_extension_subject_alt_name (GBytes *data)
+append_extension_key_usage (GcrCertificateExtensionKeyUsage *extension)
 {
 	GcrCertificateSection *section;
-	GArray *general_names;
-	GcrGeneralName *general;
-	guint i;
+	GStrv descriptions;
 
-	general_names = _gcr_certificate_extension_subject_alt_name (data);
-	if (general_names == NULL)
-		return FALSE;
+	section = _gcr_certificate_section_new (_("Key Usage"), FALSE);
+	descriptions = gcr_certificate_extension_key_usage_get_descriptions (extension);
+	_gcr_certificate_section_new_field_take_values (section, _("Usages"), descriptions);
+
+	return section;
+}
+
+static GcrCertificateSection *
+append_extension_subject_alt_name (GcrCertificateExtensionSubjectAltName *extension)
+{
+	GcrCertificateSection *section;
+	unsigned int n_names;
 
 	section = _gcr_certificate_section_new (_("Subject Alternative Names"), FALSE);
 
-	for (i = 0; i < general_names->len; i++) {
-		general = &g_array_index (general_names, GcrGeneralName, i);
-		if (general->display == NULL) {
-			_gcr_certificate_section_new_field_take_bytes (section, general->description, g_bytes_ref (general->raw));
-		} else
-			_gcr_certificate_section_new_field (section, general->description, general->display);
+	n_names = g_list_model_get_n_items (G_LIST_MODEL (extension));
+	for (unsigned int i = 0; i < n_names; i++) {
+		GcrGeneralName *name;
+		const char *description;
+		const char *value;
+
+		name = gcr_certificate_extension_subject_alt_name_get_name (extension, i);
+		description = gcr_general_name_get_description (name);
+		value = gcr_general_name_get_value (name);
+		if (value != NULL) {
+			_gcr_certificate_section_new_field (section, description, value);
+		} else {
+			GBytes *raw_value;
+			raw_value = gcr_general_name_get_value_raw (name);
+			_gcr_certificate_section_new_field_take_bytes (section, description, g_bytes_ref (raw_value));
+		}
 	}
 
-	_gcr_general_names_free (general_names);
+	return section;
+}
+
+static GcrCertificateSection *
+append_extension_certificate_policies (GcrCertificateExtensionCertificatePolicies *extension)
+{
+	GcrCertificateSection *section;
+	unsigned int n_policies;
+
+	section = _gcr_certificate_section_new (_("Certificate Policies"), FALSE);
+
+	n_policies = g_list_model_get_n_items (G_LIST_MODEL (extension));
+	for (unsigned int i = 0; i < n_policies; i++) {
+		GcrCertificatePolicy *policy;
+		const char *name;
+
+		policy = gcr_certificate_extension_certificate_policies_get_policy (extension, i);
+		name = gcr_certificate_policy_get_name (policy);
+		_gcr_certificate_section_new_field (section, _("Policy"), name);
+	}
+
+	return section;
+}
+
+static GcrCertificateSection *
+append_extension_aia (GcrCertificateExtensionAuthorityInfoAccess *extension)
+{
+	GcrCertificateSection *section;
+	unsigned int n_descriptions;
+
+	section = _gcr_certificate_section_new (egg_oid_get_description (GCR_OID_AUTHORITY_INFO_ACCESS), FALSE);
+
+	n_descriptions = g_list_model_get_n_items (G_LIST_MODEL (extension));
+	for (unsigned int i = 0; i < n_descriptions; i++) {
+		GcrAccessDescription *description;
+		GcrGeneralName *location;
+		const char *location_val, *method;
+
+		description = g_list_model_get_item (G_LIST_MODEL (extension), i);
+
+		location = gcr_access_description_get_location (description);
+		location_val = gcr_general_name_get_value (location);
+		_gcr_certificate_section_new_field (section, _("Location"), location_val);
+
+		method = gcr_access_description_get_method_name (description);
+		_gcr_certificate_section_new_field (section, _("Access Method"), method);
+
+		g_object_unref (description);
+	}
+
+	return section;
+}
+
+static GcrCertificateSection *
+append_extension_cdp (GcrCertificateExtensionCrlDistributionPoints *extension)
+{
+	GcrCertificateSection *section;
+	GcrDistributionPoint *item;
+	unsigned int i = 0;
+
+	section = _gcr_certificate_section_new (_("CRL Distribution Points"), FALSE);
+
+	while ((item = g_list_model_get_item (G_LIST_MODEL (extension), i)) != NULL) {
+		GcrGeneralNames *full_name;
+
+		full_name = gcr_distribution_point_get_full_name (item);
+		if (full_name != NULL) {
+			unsigned int n_names;
+
+			n_names = g_list_model_get_n_items (G_LIST_MODEL (full_name));
+			for (unsigned int j = 0; j < n_names; j++) {
+				GcrGeneralName *name;
+				const char *name_val;
+
+				name = gcr_general_names_get_name (full_name, j);
+				name_val = gcr_general_name_get_value (name);
+				_gcr_certificate_section_new_field (section, _("Distribution Point"), name_val);
+			}
+		} else {
+			const char *part;
+
+			part = gcr_distribution_point_get_relative_name_part (item, "cn");
+			if (part != NULL)
+				_gcr_certificate_section_new_field (section, _("Distribution Point CN"), part);
+			part = gcr_distribution_point_get_relative_name_part (item, "ou");
+			if (part != NULL)
+				_gcr_certificate_section_new_field (section, _("Distribution Point OU"), part);
+			part = gcr_distribution_point_get_relative_name_part (item, "u");
+			if (part != NULL)
+				_gcr_certificate_section_new_field (section, _("Distribution Point U"), part);
+		}
+
+		g_object_unref (item);
+		i++;
+	}
 
 	return section;
 }
@@ -1057,50 +1206,58 @@ append_extension_hex (GQuark oid,
 	/* Extension type */
 	text = egg_oid_get_description (oid);
 	_gcr_certificate_section_new_field (section, _("Identifier"), text);
-	_gcr_certificate_section_new_field_take_bytes (section, _("Value"), g_steal_pointer (&value));
+	_gcr_certificate_section_new_field_take_bytes (section, _("Value"),
+	                                               g_bytes_ref (value));
 
 	return section;
 }
 
 static GcrCertificateSection *
-append_extension (GcrCertificate *self,
-                  GNode *node)
+append_extension (GcrCertificate          *self,
+                  GcrCertificateExtension *extension)
 {
 	GQuark oid;
-	GBytes *value;
 	gboolean critical;
 	GcrCertificateSection *section = NULL;
 
 	/* Dig out the OID */
-	oid = egg_asn1x_get_oid_as_quark (egg_asn1x_node (node, "extnID", NULL));
+	oid = _gcr_certificate_extension_get_oid_as_quark (extension);
 	g_return_val_if_fail (oid, NULL);
-
-	/* Extension value */
-	value = egg_asn1x_get_string_as_bytes (egg_asn1x_node (node, "extnValue", NULL));
 
 	/* The custom parsers */
 	if (oid == GCR_OID_BASIC_CONSTRAINTS)
-		section = append_extension_basic_constraints (value);
+		section = append_extension_basic_constraints (GCR_CERTIFICATE_EXTENSION_BASIC_CONSTRAINTS (extension));
 	else if (oid == GCR_OID_EXTENDED_KEY_USAGE)
-		section = append_extension_extended_key_usage (value);
+		section = append_extension_extended_key_usage (GCR_CERTIFICATE_EXTENSION_EXTENDED_KEY_USAGE (extension));
 	else if (oid == GCR_OID_SUBJECT_KEY_IDENTIFIER)
-		section = append_extension_subject_key_identifier (value);
+		section = append_extension_subject_key_identifier (GCR_CERTIFICATE_EXTENSION_SUBJECT_KEY_IDENTIFIER (extension));
+	else if (oid == GCR_OID_AUTHORITY_KEY_IDENTIFIER)
+		section = append_extension_authority_key_identifier (GCR_CERTIFICATE_EXTENSION_AUTHORITY_KEY_IDENTIFIER (extension));
 	else if (oid == GCR_OID_KEY_USAGE)
-		section = append_extension_key_usage (value);
+		section = append_extension_key_usage (GCR_CERTIFICATE_EXTENSION_KEY_USAGE (extension));
 	else if (oid == GCR_OID_SUBJECT_ALT_NAME)
-		section = append_extension_subject_alt_name (value);
+		section = append_extension_subject_alt_name (GCR_CERTIFICATE_EXTENSION_SUBJECT_ALT_NAME (extension));
+	else if (oid == GCR_OID_CERTIFICATE_POLICIES)
+		section = append_extension_certificate_policies (GCR_CERTIFICATE_EXTENSION_CERTIFICATE_POLICIES (extension));
+	else if (oid == GCR_OID_AUTHORITY_INFO_ACCESS)
+		section = append_extension_aia (GCR_CERTIFICATE_EXTENSION_AUTHORITY_INFO_ACCESS (extension));
+	else if (oid == GCR_OID_CRL_DISTRIBUTION_POINTS)
+		section = append_extension_cdp (GCR_CERTIFICATE_EXTENSION_CRL_DISTRIBUTION_POINTS (extension));
 
 	/* Otherwise the default raw display */
 	if (!section) {
-		section = append_extension_hex (oid, g_steal_pointer (&value));
+		GBytes *value;
+
+		value = gcr_certificate_extension_get_value (extension);
+		section = append_extension_hex (oid, value);
 	}
 
 	/* Critical */
-	if (section && egg_asn1x_get_boolean (egg_asn1x_node (node, "critical", NULL), &critical)) {
+	critical = gcr_certificate_extension_is_critical (extension);
+	if (section != NULL && critical) {
 		_gcr_certificate_section_new_field (section, _("Critical"), critical ? _("Yes") : _("No"));
 	}
 
-	g_clear_pointer (&value, g_bytes_unref);
 	return section;
 }
 
@@ -1165,6 +1322,7 @@ gcr_certificate_get_interface_elements (GcrCertificate *self)
 	GDateTime *datetime;
 	gulong version;
 	guint bits;
+	GcrCertificateExtensionList *extensions;
 
 	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), NULL);
 
@@ -1214,10 +1372,11 @@ gcr_certificate_get_interface_elements (GcrCertificate *self)
 	/* The Issued Parameters */
 	section = _gcr_certificate_section_new (_("Issued Certificate"), FALSE);
 
-	if (!egg_asn1x_get_integer_as_ulong (egg_asn1x_node (info->asn1, "tbsCertificate", "version", NULL), &version)) {
+	version = gcr_certificate_get_version (self);
+	if (version == 0) {
 		g_critical ("Unable to parse certificate version");
 	} else {
-		display = g_strdup_printf ("%lu", version + 1);
+		display = g_strdup_printf ("%lu", version);
 		_gcr_certificate_section_new_field_take_value (section, _("Version"), g_steal_pointer (&display));
 	}
 
@@ -1267,14 +1426,16 @@ gcr_certificate_get_interface_elements (GcrCertificate *self)
 	list = g_list_prepend (list, g_steal_pointer (&section));
 
 	/* Extensions */
-	for (guint extension_num = 1; TRUE; ++extension_num) {
-		GNode *extension = egg_asn1x_node (info->asn1, "tbsCertificate", "extensions", extension_num, NULL);
-		if (extension == NULL)
-			break;
+	extensions = gcr_certificate_list_extensions (self);
+	for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (extensions)); i++) {
+		GcrCertificateExtension *extension;
+
+		extension = gcr_certificate_extension_list_get_extension (extensions, i);
 		section = append_extension (self, extension);
 		if (section)
 			list = g_list_prepend (list, g_steal_pointer (&section));
 	}
+	g_clear_object (&extensions);
 
 	/* Signature */
 	section = _gcr_certificate_section_new (_("Signature"), FALSE);
@@ -1293,6 +1454,53 @@ gcr_certificate_get_interface_elements (GcrCertificate *self)
 	list = g_list_prepend (list, g_steal_pointer (&section));
 
 	return g_list_reverse (list);
+}
+
+/**
+ * gcr_certificate_list_extensions:
+ *
+ * Creates a [class@CertificateExtensionList] that can be used to inspect the
+ * extensions of this certificate.
+ *
+ * Returns: (transfer full): The certificate's extensions
+ *
+ * Since: 4.3.90
+ */
+GcrCertificateExtensionList *
+gcr_certificate_list_extensions (GcrCertificate *self)
+{
+	GcrCertificateInfo *info;
+
+	g_return_val_if_fail (GCR_IS_CERTIFICATE (self), NULL);
+
+	info = certificate_info_load (self);
+	g_return_val_if_fail (info != NULL, NULL);
+
+	return _gcr_certificate_extension_list_new_for_asn1 (info->asn1);
+}
+
+/* Finds an extension without trying to list (and parse) all extensions */
+static GcrCertificateExtension *
+_gcr_certificate_find_extension (GNode *cert,
+                                 GQuark oid)
+{
+	GNode *node;
+
+	g_return_val_if_fail (cert != NULL, NULL);
+
+	/* Extensions */
+	for (int index = 1; index < G_MAXINT; ++index) {
+		node = egg_asn1x_node (cert, "tbsCertificate", "extensions", index, NULL);
+		if (node == NULL)
+			return NULL;
+
+		/* Dig out the OID */
+		if (egg_asn1x_get_oid_as_quark (egg_asn1x_node (node, "extnID", NULL)) == oid) {
+			return _gcr_certificate_extension_parse (node);
+		}
+	}
+
+	g_return_val_if_reached (NULL);
 }
 
 /* -----------------------------------------------------------------------------

@@ -24,13 +24,8 @@ override_dh_auto_configure:
 		$(SSH_AGENT) \
 		$(SYSTEMD)
 
-# Disable fakeroot as this confuses some of the tests
-# Ignore test failures on s390x
 override_dh_auto_test:
-ifneq (,$(filter s390x,$(DEB_HOST_ARCH)))
-	env -u LD_PRELOAD dbus-run-session -- dh_auto_test || true
-else
+	# Disable fakeroot as this confuses some of the tests
 	env -u LD_PRELOAD dbus-run-session -- dh_auto_test
-endif
 
 override_dh_gnome_clean:

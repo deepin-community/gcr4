@@ -14,10 +14,17 @@ You can build GCR using [Meson] with the following build commands (replace
 `$BUILDDIR` with your chosed build directory).
 
 ```
-$ meson $BUILDDIR
+$ meson setup $BUILDDIR
 $ meson compile -C $BUILDDIR
 $ meson install -C $BUILDDIR
 ```
+
+Versions
+--------
+Starting version 4.0.0, gcr and gck use semantic versioning.
+
+To denote unstable versions, the micro version number will correspond to 90 or
+higher, e.g. `4.$MINOR.90`.
 
 Contributing
 ------------

@@ -701,8 +701,8 @@ atlv_parse_cls_tag (const guchar *at,
                     gulong *tag,
                     gint *off)
 {
-	gint punt, ris, last;
-	gint n_data;
+	guint punt, ris, last;
+	guint n_data;
 	guchar val;
 
 	g_assert (end >= at);
@@ -762,9 +762,9 @@ atlv_parse_length (const guchar *at,
                    const guchar *end,
                    gint *off)
 {
-	gint ans, last;
-	gint k, punt;
-	gint n_data;
+	guint ans, last;
+	guint k, punt;
+	guint n_data;
 
 	g_assert (at != NULL);
 	g_assert (end != NULL);
@@ -809,7 +809,7 @@ atlv_parse_length (const guchar *at,
 		}
 
 		*off = punt;
-		return ans;
+		return (gint) ans;
 	}
 }
 
@@ -3389,6 +3389,30 @@ egg_asn1x_set_string_as_bytes (GNode *node,
 	                  type == EGG_ASN1X_VISIBLE_STRING);
 
 	anode_set_value (node, bytes);
+}
+
+void
+egg_asn1x_take_string_as_bytes (GNode *node,
+				GBytes *bytes)
+{
+	gint type;
+
+	g_return_if_fail (node != NULL);
+	g_return_if_fail (bytes != NULL);
+
+	type = anode_def_type (node);
+	g_return_if_fail (type == EGG_ASN1X_OCTET_STRING ||
+	                  type == EGG_ASN1X_GENERAL_STRING ||
+	                  type == EGG_ASN1X_NUMERIC_STRING ||
+	                  type == EGG_ASN1X_IA5_STRING ||
+	                  type == EGG_ASN1X_TELETEX_STRING ||
+	                  type == EGG_ASN1X_PRINTABLE_STRING ||
+	                  type == EGG_ASN1X_UNIVERSAL_STRING ||
+	                  type == EGG_ASN1X_BMP_STRING ||
+	                  type == EGG_ASN1X_UTF8_STRING ||
+	                  type == EGG_ASN1X_VISIBLE_STRING);
+
+	anode_take_value (node, bytes);
 }
 
 GBytes *
