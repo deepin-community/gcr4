@@ -4,6 +4,18 @@ gcr_headers_install_dir = gcr_headers_subdir / 'gcr'
 gcr_public_sources = files(
   'gcr-certificate.c',
   'gcr-certificate-chain.c',
+  'gcr-certificate-extension.c',
+  'gcr-certificate-extension-authority-info-access.c',
+  'gcr-certificate-extension-authority-key-identifier.c',
+  'gcr-certificate-extension-basic-constraints.c',
+  'gcr-certificate-extension-certificate-policies.c',
+  'gcr-certificate-extension-crl-distribution-points.c',
+  'gcr-certificate-extension-extended-key-usage.c',
+  'gcr-certificate-extension-key-usage.c',
+  'gcr-certificate-extension-list.c',
+  'gcr-certificate-extension-subject-alt-name.c',
+  'gcr-certificate-extension-subject-key-identifier.c',
+  'gcr-certificate-extensions-common.c',
   'gcr-certificate-field.c',
   'gcr-certificate-request.c',
   'gcr-certificate-section.c',
@@ -19,6 +31,7 @@ gcr_public_sources = files(
   'gcr-secure-memory.c',
   'gcr-simple-certificate.c',
   'gcr-ssh-askpass.c',
+  'gcr-subject-public-key-info.c',
   'gcr-system-prompt.c',
   'gcr-system-prompter.c',
   'gcr-trust.c',
@@ -26,7 +39,6 @@ gcr_public_sources = files(
 
 gcr_private_sources = files(
   'gcr-callback-output-stream.c',
-  'gcr-certificate-extensions.c',
   'gcr-gnupg-importer.c',
   'gcr-gnupg-process.c',
   'gcr-gnupg-records.c',
@@ -39,10 +51,23 @@ gcr_private_sources = files(
   'gcr-util.c',
 )
 
+if with_gcrypt
+  gcr_private_sources += files(
+    'gcr-parser-libgcrypt.c',
+  )
+elif with_gnutls
+  gcr_private_sources += files(
+    'gcr-parser-gnutls.c',
+  )
+endif
+
 gcr_headers = files(
   'gcr.h',
   'gcr-certificate.h',
   'gcr-certificate-chain.h',
+  'gcr-certificate-extension.h',
+  'gcr-certificate-extensions.h',
+  'gcr-certificate-extension-list.h',
   'gcr-certificate-field.h',
   'gcr-certificate-request.h',
   'gcr-certificate-section.h',
@@ -58,6 +83,7 @@ gcr_headers = files(
   'gcr-secure-memory.h',
   'gcr-simple-certificate.h',
   'gcr-ssh-askpass.h',
+  'gcr-subject-public-key-info.h',
   'gcr-system-prompt.h',
   'gcr-system-prompter.h',
   'gcr-trust.h',
@@ -145,7 +171,7 @@ gcr_lib = shared_library(gcr_basename,
   link_args: gcr_linkflags,
   link_depends: gcr_symbolmap,
   include_directories: config_h_dir,
-  version: gcr_version,
+  version: gcr_library_version,
   soversion: gcr_soversion,
   install: true,
 )
@@ -163,6 +189,8 @@ gcr_dep = declare_dependency(
     gcr_marshal_gen[1],
   ],
 )
+meson.override_dependency(gcr_basename, gcr_dep)
+
 
 if get_option('introspection')
   gcr_gir = gnome.generate_gir(gcr_lib,
@@ -250,8 +278,20 @@ if get_option('ssh_agent')
       },
       install_dir: systemduserunitdir,
     )
-    install_data('gcr-ssh-agent.socket',
-		 install_dir: systemduserunitdir)
+    systemctl = find_program('systemctl', required: false)
+    if systemctl.found()
+        systemctl = systemctl.full_path()
+    else
+        systemctl = '/usr/bin/systemctl'
+    endif
+    configure_file(
+      input: 'gcr-ssh-agent.socket.in',
+      output: '@BASENAME@',
+      configuration: {
+        'systemctl': systemctl,
+      },
+      install_dir: systemduserunitdir,
+    )
   endif
 
   gcr_ssh_agent_test_cflags = [

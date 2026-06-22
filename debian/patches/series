@@ -1,1 +1,2 @@
 systemd-Start-with-graphical-session-instead-of-default.patch
+disable-test-which-segfaults.patch

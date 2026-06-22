@@ -10,9 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Nepali Translation Project\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gcr/issues\n"
-"POT-Creation-Date: 2022-09-04 18:07+0000\n"
-"PO-Revision-Date: 2022-09-19 10:54+0545\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gcr/issues/\n"
+"POT-Creation-Date: 2025-02-10 22:37+0000\n"
+"PO-Revision-Date: 2025-02-27 16:18+0545\n"
 "Last-Translator: Pawan Chitrakar <chautari@gmail.com>\n"
 "Language-Team: Nepali Translation Team <chautari@gmail.com>\n"
 "Language: ne\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n !=1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.5\n"
 
 #: egg/egg-oid.c:40
 msgid "Domain Component"
@@ -63,7 +63,7 @@ msgstr "साझा नाम"
 msgid "Surname"
 msgstr "थर"
 
-#: egg/egg-oid.c:68 gcr/gcr-certificate.c:1228
+#: egg/egg-oid.c:68 gcr/gcr-certificate.c:1387
 msgid "Serial Number"
 msgstr "क्रम सङ्ख्या"
 
@@ -109,7 +109,7 @@ msgstr "थालनी गर्नुहोस्"
 
 #: egg/egg-oid.c:90
 msgid "Generation Qualifier"
-msgstr "योग्यता सिर्जना "
+msgstr "योग्यता सिर्जना"
 
 #: egg/egg-oid.c:92
 msgid "DN Qualifier"
@@ -155,82 +155,213 @@ msgstr "RSA सँग MD5"
 msgid "SHA1 with RSA"
 msgstr "RSA सँग SHA1"
 
+#: egg/egg-oid.c:114
+msgid "RSA with OAEP padding"
+msgstr "ओएईपी प्याडिङको साथ आरएसए"
+
 #: egg/egg-oid.c:115
+msgid "RSA with MGF1"
+msgstr "एमजीएफ१  के साथ आरएसए"
+
+#: egg/egg-oid.c:116
+msgid "RSA signature with RSA-PSS"
+msgstr "आरएसए-पीएसएससँग आरएसए हस्ताक्षर"
+
+#: egg/egg-oid.c:117
+msgid "SHA256 with RSA encryption"
+msgstr "आरएसए गुप्तिकरणको साथ एसएचए २५६"
+
+#: egg/egg-oid.c:118
+msgid "SHA384 with RSA encryption"
+msgstr "आरएसए एन्क्रिप्शनको साथ एसएचए ३८४"
+
+#: egg/egg-oid.c:119
+msgid "SHA512 with RSA encryption"
+msgstr "आरएसए एन्क्रिप्शनको साथ एसएचए ५१२"
+
+#: egg/egg-oid.c:120
+msgid "SHA224 with RSA encryption"
+msgstr "आरएसए एन्क्रिप्शनको साथ एसएचए २२४"
+
+#: egg/egg-oid.c:122
 msgid "DSA"
 msgstr "डीएसए"
 
-#: egg/egg-oid.c:116
+#: egg/egg-oid.c:123
 msgid "SHA1 with DSA"
 msgstr "DSA सँग SHA1"
 
-#: egg/egg-oid.c:118
+#: egg/egg-oid.c:125
 msgid "Elliptic Curve"
 msgstr "दीर्घाकारको वक्र कुञ्जी"
 
-#: egg/egg-oid.c:119
+#: egg/egg-oid.c:126
 msgid "SHA1 with ECDSA"
 msgstr "ECDSA संग SHA1"
 
-#: egg/egg-oid.c:120
+#: egg/egg-oid.c:127
 msgid "SHA224 with ECDSA"
 msgstr "ECDSA संग SHA224"
 
-#: egg/egg-oid.c:121
+#: egg/egg-oid.c:128
 msgid "SHA256 with ECDSA"
 msgstr "ECDSA संग SHA256"
 
-#: egg/egg-oid.c:122
+#: egg/egg-oid.c:129
 msgid "SHA384 with ECDSA"
 msgstr "ECDSA संग SHA384"
 
-#: egg/egg-oid.c:123
+#: egg/egg-oid.c:130
 msgid "SHA512 with ECDSA"
 msgstr "ECDSA संग SHA512"
 
-#: egg/egg-oid.c:125
+#: egg/egg-oid.c:132
 msgid "GOST R 34.11-94 with GOST R 34.10-2001"
 msgstr "GOST R 34.11-94 सँग GOST R 34.10-2001"
 
-#: egg/egg-oid.c:126
+#: egg/egg-oid.c:133
 msgid "GOST R 34.10-2001"
 msgstr "GOST R 34.10-2001"
 
-#: egg/egg-oid.c:127
+#: egg/egg-oid.c:134
 msgid "GOST R 34.10-2012 256-bit curve"
 msgstr "GOST R 34.10-2012 256-bit curve"
 
-#: egg/egg-oid.c:128
+#: egg/egg-oid.c:135
 msgid "GOST R 34.10-2012 512-bit curve"
 msgstr "GOST R 34.10-2012 512-bit curve"
 
-#: egg/egg-oid.c:129
+#: egg/egg-oid.c:136
 msgid "GOST R 34.11-2012/256 with GOST R 34.10-2012 256-bit curve"
 msgstr "GOST R 34.11-2012/256 with GOST R 34.10-2012 256-bit curve"
 
-#: egg/egg-oid.c:130
+#: egg/egg-oid.c:137
 msgid "GOST R 34.11-2012/512 with GOST R 34.10-2012 512-bit curve"
 msgstr "GOST R 34.11-2012/512 with GOST R 34.10-2012 512-bit curve"
 
 #. Extended Key Usages
-#: egg/egg-oid.c:133
+#: egg/egg-oid.c:140
 msgid "Server Authentication"
 msgstr "सर्भरलाई प्रमाणीकरण"
 
-#: egg/egg-oid.c:134
+#: egg/egg-oid.c:141
 msgid "Client Authentication"
 msgstr "ग्राहक प्रमाणीकरण"
 
-#: egg/egg-oid.c:135
+#: egg/egg-oid.c:142
 msgid "Code Signing"
 msgstr "कोड साइन"
 
-#: egg/egg-oid.c:136
+#: egg/egg-oid.c:143
 msgid "Email Protection"
 msgstr "इमेल सुरक्षा"
 
-#: egg/egg-oid.c:137
+#: egg/egg-oid.c:144
 msgid "Time Stamping"
 msgstr "समय  स्ट्याम्पिङ"
+
+#. Extended certificate attributes
+#: egg/egg-oid.c:147
+msgid "Certificate Authority Information Access"
+msgstr "प्रमाणपत्र प्राधिकरण सूचना पहुँच"
+
+#: egg/egg-oid.c:148
+msgid "Subject directory attributes certificate extension"
+msgstr "विषय डाइरेक्टरी विशेषता प्रमाणपत्र विस्तार"
+
+#: egg/egg-oid.c:149
+msgid "Subject key identifier"
+msgstr "विषय कुञ्जी पहिचायक"
+
+#: egg/egg-oid.c:150
+msgid "Key usage"
+msgstr "कुञ्जि उपयोग"
+
+#: egg/egg-oid.c:151
+msgid "Private key usage period"
+msgstr "निजी कुञ्जी प्रयोग अवधि"
+
+#: egg/egg-oid.c:152
+msgid "Subject alternative name"
+msgstr "विषय वैकल्पिक नाम"
+
+#: egg/egg-oid.c:153
+msgid "Issuer alternative name"
+msgstr "जारीकर्ता वैकल्पिक नाम"
+
+#: egg/egg-oid.c:154
+msgid "Basic constraints"
+msgstr "आधारभूत अवरोधहरू"
+
+#: egg/egg-oid.c:155
+msgid "CRL number"
+msgstr "सीआरएल नम्बर"
+
+#: egg/egg-oid.c:156
+msgid "Reason code"
+msgstr "कारण कोड"
+
+#: egg/egg-oid.c:157
+msgid "Hold instruction code"
+msgstr "निर्देशन कोड होल्ड गर्नुहोस्"
+
+#: egg/egg-oid.c:158
+msgid "Invalidity date"
+msgstr "अवैधता मिति"
+
+#: egg/egg-oid.c:159
+msgid "Certificate Revocation List indicator"
+msgstr "प्रमाणपत्र खारेजी सूची सूचक"
+
+#: egg/egg-oid.c:160
+msgid "Issuing distribution point"
+msgstr "वितरण बिन्दु जारी गर्दैछ"
+
+#: egg/egg-oid.c:161
+msgid "Certificate issuer"
+msgstr "प्रमाणपत्र जारीकर्ता"
+
+#: egg/egg-oid.c:162
+msgid "Name constraints"
+msgstr "नाम अवरोधहरू"
+
+#: egg/egg-oid.c:163
+msgid "Certificate Revocation List distribution points"
+msgstr "प्रमाणपत्र खारेजी सूची वितरण बिन्दुहरू"
+
+#: egg/egg-oid.c:164
+msgid "Certificate policies"
+msgstr "प्रमाणपत्र नीति"
+
+#: egg/egg-oid.c:165
+msgid "Policy mappings"
+msgstr "नीति म्यापिङ"
+
+#: egg/egg-oid.c:166
+msgid "Policy constraints"
+msgstr "नीतिगत अवरोधहरू"
+
+#: egg/egg-oid.c:167
+msgid "Authority key identifier"
+msgstr "प्राधिकरण कुञ्जी पहिचानकर्ता"
+
+#. Certificate Policies
+#: egg/egg-oid.c:170
+msgid "Extended Validation"
+msgstr "विस्तारित प्रमाणीकरण"
+
+#: egg/egg-oid.c:171
+msgid "Certification Practices Statement"
+msgstr "प्रमाणीकरण अभ्यास कथन"
+
+#. Authority Information Access (AIA) methods
+#: egg/egg-oid.c:174
+msgid "Online Certificate Status Protocol (OCSP)"
+msgstr "अनलाइन प्रमाणपत्र स्थिति प्रोटोकल (OCSP)"
+
+#: egg/egg-oid.c:175
+msgid "Certification Authority Issuer"
+msgstr "प्रमाणीकरण प्राधिकरण जारीकर्ता"
 
 #: gck/gck-module.c:271
 #, c-format
@@ -250,266 +381,302 @@ msgstr "दर्ता भएको PKCS#11 मोड्युलहरू स�
 #: gck/gck-uri.c:167
 #, c-format
 msgid "The URI has invalid encoding."
-msgstr "URI सँग अवैध सङ्केतन छ ।"
+msgstr "URI सँग अवैध सङ्केतन छ ।."
 
 #: gck/gck-uri.c:171
 msgid "The URI does not have the “pkcs11” scheme."
-msgstr "URI सँग \"pkcs11\" योजना छैन ।"
+msgstr "URI सँग \"pkcs11\" योजना छैन ।."
 
 #: gck/gck-uri.c:175
 msgid "The URI has bad syntax."
-msgstr "URI सँग खराब वाक्य संरचना छ ।"
+msgstr "URI सँग खराब वाक्य संरचना छ ।."
 
 #: gck/gck-uri.c:179
 msgid "The URI has a bad version number."
-msgstr "URI सँग खराब संस्करण नम्बर छ ।"
+msgstr "URI सँग खराब संस्करण नम्बर छ ।."
 
 #: gcr/gcr-callback-output-stream.c:56 gcr/gcr-callback-output-stream.c:73
 #, c-format
 msgid "The stream was closed"
 msgstr "स्ट्रीम बन्द गरियो"
 
-#: gcr/gcr-certificate.c:882
-msgid "Key Algorithm"
-msgstr "मुख्य एलोगारिदम"
-
-#: gcr/gcr-certificate.c:888
-msgid "Key Parameters"
-msgstr "कुञ्जी परिमिति"
-
-#: gcr/gcr-certificate.c:895
-msgid "Key Size"
-msgstr "कुञ्जि आकार"
-
-#: gcr/gcr-certificate.c:905
-msgid "Key SHA1 Fingerprint"
-msgstr "कुञ्जी SHA1 औठाछाप"
-
-#: gcr/gcr-certificate.c:909 gcr/gcr-parser.c:343
-msgid "Public Key"
-msgstr "सार्वजनिक कुञ्जीs"
-
-#: gcr/gcr-certificate.c:923
-msgid "Basic Constraints"
-msgstr "आधारभूत अवरोधहरू"
-
-#: gcr/gcr-certificate.c:924
-msgid "Certificate Authority"
-msgstr "प्रमाणपत्र अधिकार"
-
-#: gcr/gcr-certificate.c:924 gcr/gcr-certificate.c:1100
-msgid "Yes"
-msgstr "ठिक छ"
-
-#: gcr/gcr-certificate.c:924 gcr/gcr-certificate.c:1100
-msgid "No"
-msgstr "होइन"
-
-#: gcr/gcr-certificate.c:927
-msgid "Unlimited"
-msgstr "असिमित"
-
-#: gcr/gcr-certificate.c:931
-msgid "Max Path Length"
-msgstr "अधिकतम मार्ग लम्बाइ"
-
-#: gcr/gcr-certificate.c:955
-msgid "Extended Key Usage"
-msgstr "विस्तारित कुञ्जी उपयोग"
-
-#: gcr/gcr-certificate.c:956
-msgid "Allowed Purposes"
-msgstr "अनुमति प्राप्त उद्देश्य"
-
-#: gcr/gcr-certificate.c:973
-msgid "Subject Key Identifier"
-msgstr "विषय कुञ्जी पहिचायक"
-
-#: gcr/gcr-certificate.c:976
-msgid "Key Identifier"
-msgstr "कुञ्जी पहिचायक"
-
-#: gcr/gcr-certificate.c:985
+#: gcr/gcr-certificate-extension-key-usage.c:64
 msgid "Digital signature"
 msgstr "डिजिटल हस्ताक्षर"
 
-#: gcr/gcr-certificate.c:986
+#: gcr/gcr-certificate-extension-key-usage.c:65
 msgid "Non repudiation"
 msgstr "सहभागी नभएको"
 
-#: gcr/gcr-certificate.c:987
+#: gcr/gcr-certificate-extension-key-usage.c:66
 msgid "Key encipherment"
 msgstr "कुञ्जी कूटलेखन"
 
-#: gcr/gcr-certificate.c:988
+#: gcr/gcr-certificate-extension-key-usage.c:67
 msgid "Data encipherment"
 msgstr "डेटा कूटलेखन"
 
-#: gcr/gcr-certificate.c:989
+#: gcr/gcr-certificate-extension-key-usage.c:68
 msgid "Key agreement"
 msgstr "सम्झौता कुञ्जि"
 
-#: gcr/gcr-certificate.c:990
+#: gcr/gcr-certificate-extension-key-usage.c:69
 msgid "Certificate signature"
 msgstr "प्रमाणपत्र हस्ताक्षर"
 
-#: gcr/gcr-certificate.c:991
+#: gcr/gcr-certificate-extension-key-usage.c:70
 msgid "Revocation list signature"
 msgstr "खारेजी हस्ताक्षर सूची"
 
-#: gcr/gcr-certificate.c:992
+#: gcr/gcr-certificate-extension-key-usage.c:71
 msgid "Encipher only"
 msgstr "गुप्तलेखन गर्ने मात्र"
 
-#: gcr/gcr-certificate.c:993
+#: gcr/gcr-certificate-extension-key-usage.c:72
 msgid "Decipher only"
 msgstr "गुप्तलेखन हताउने मात्र"
 
-#: gcr/gcr-certificate.c:1014
+#: gcr/gcr-certificate-extensions-common.c:136
+msgid "Other Name"
+msgstr "अन्य नाम"
+
+#: gcr/gcr-certificate-extensions-common.c:152
+msgid "XMPP Addr"
+msgstr "XMPP ठेगाना"
+
+#: gcr/gcr-certificate-extensions-common.c:156
+msgid "DNS SRV"
+msgstr "DNS SRV"
+
+#: gcr/gcr-certificate-extensions-common.c:173
+msgid "Email"
+msgstr "इमेल"
+
+#: gcr/gcr-certificate-extensions-common.c:185
+msgid "DNS"
+msgstr "DNS"
+
+#: gcr/gcr-certificate-extensions-common.c:197
+msgid "X400 Address"
+msgstr "X400 ठेगाना"
+
+#: gcr/gcr-certificate-extensions-common.c:208
+msgid "Directory Name"
+msgstr "डाइरेक्टरी नाम"
+
+#: gcr/gcr-certificate-extensions-common.c:220
+msgid "EDI Party Name"
+msgstr "EDI पार्टीको नाम"
+
+#: gcr/gcr-certificate-extensions-common.c:231
+msgid "URI"
+msgstr "URI"
+
+#: gcr/gcr-certificate-extensions-common.c:243
+msgid "IP Address"
+msgstr "आईपी ठेगाना"
+
+#: gcr/gcr-certificate-extensions-common.c:255
+msgid "Registered ID"
+msgstr "दर्ता आईडि"
+
+#: gcr/gcr-certificate.c:956
+msgid "Key Algorithm"
+msgstr "मुख्य एलोगारिदम"
+
+#: gcr/gcr-certificate.c:962
+msgid "Key Parameters"
+msgstr "कुञ्जी परिमिति"
+
+#: gcr/gcr-certificate.c:969
+msgid "Key Size"
+msgstr "कुञ्जि आकार"
+
+#: gcr/gcr-certificate.c:979
+msgid "Key SHA1 Fingerprint"
+msgstr "कुञ्जी SHA1 औठाछाप"
+
+#: gcr/gcr-certificate.c:983 gcr/gcr-parser.c:334
+msgid "Public Key"
+msgstr "सार्वजनिक कुञ्जीs"
+
+#: gcr/gcr-certificate.c:994
+msgid "Basic Constraints"
+msgstr "आधारभूत अवरोधहरू"
+
+#: gcr/gcr-certificate.c:996
+msgid "Certificate Authority"
+msgstr "प्रमाणपत्र अधिकार"
+
+#: gcr/gcr-certificate.c:996 gcr/gcr-certificate.c:1258
+msgid "Yes"
+msgstr "ठिक छ"
+
+#: gcr/gcr-certificate.c:996 gcr/gcr-certificate.c:1258
+msgid "No"
+msgstr "होइन"
+
+#: gcr/gcr-certificate.c:1000
+msgid "Unlimited"
+msgstr "असिमित"
+
+#: gcr/gcr-certificate.c:1004
+msgid "Max Path Length"
+msgstr "अधिकतम मार्ग लम्बाइ"
+
+#: gcr/gcr-certificate.c:1015
+msgid "Extended Key Usage"
+msgstr "विस्तारित कुञ्जी उपयोग"
+
+#: gcr/gcr-certificate.c:1018
+msgid "Allowed Purposes"
+msgstr "अनुमति प्राप्त उद्देश्य"
+
+#: gcr/gcr-certificate.c:1032
+msgid "Subject Key Identifier"
+msgstr "विषय कुञ्जी पहिचायक"
+
+#: gcr/gcr-certificate.c:1036 gcr/gcr-certificate.c:1054
+msgid "Key Identifier"
+msgstr "कुञ्जी पहिचायक"
+
+#: gcr/gcr-certificate.c:1065
 msgid "Key Usage"
 msgstr "कुञ्जि उपयोग"
 
-#: gcr/gcr-certificate.c:1015
+#: gcr/gcr-certificate.c:1067
 msgid "Usages"
 msgstr "प्रयोग"
 
-#: gcr/gcr-certificate.c:1033
+#: gcr/gcr-certificate.c:1078
 msgid "Subject Alternative Names"
-msgstr "वैकल्पिक विषय नामहरू "
+msgstr "वैकल्पिक विषय नामहरू"
 
-#: gcr/gcr-certificate.c:1055
+#: gcr/gcr-certificate.c:1107
+msgid "Certificate Policies"
+msgstr "प्रमाणपत्र नीति"
+
+#: gcr/gcr-certificate.c:1116
+msgid "Policy"
+msgstr "नीति"
+
+#: gcr/gcr-certificate.c:1140
+msgid "Location"
+msgstr "स्थान"
+
+#: gcr/gcr-certificate.c:1143
+msgid "Access Method"
+msgstr "पहुँच विधि"
+
+#: gcr/gcr-certificate.c:1158
+msgid "CRL Distribution Points"
+msgstr "CRL वितरण बिन्दुहरू"
+
+#: gcr/gcr-certificate.c:1174
+msgid "Distribution Point"
+msgstr "वितरण बिन्दु"
+
+#: gcr/gcr-certificate.c:1181
+msgid "Distribution Point CN"
+msgstr "वितरण बिन्दु CN"
+
+#: gcr/gcr-certificate.c:1184
+msgid "Distribution Point OU"
+msgstr "वितरण बिन्दु OU"
+
+#: gcr/gcr-certificate.c:1187
+msgid "Distribution Point U"
+msgstr "वितरण बिन्दु U"
+
+#: gcr/gcr-certificate.c:1204
 msgid "Extension"
 msgstr "विस्तार"
 
-#: gcr/gcr-certificate.c:1059
+#: gcr/gcr-certificate.c:1208
 msgid "Identifier"
 msgstr "पहिचायक"
 
-#: gcr/gcr-certificate.c:1060
+#: gcr/gcr-certificate.c:1209
 msgid "Value"
 msgstr "मान"
 
-#: gcr/gcr-certificate.c:1100
+#: gcr/gcr-certificate.c:1258
 msgid "Critical"
 msgstr "नाजुक"
 
-#: gcr/gcr-certificate.c:1176 gcr/gcr-certificate.c:1407 gcr/gcr-parser.c:340
+#: gcr/gcr-certificate.c:1334 gcr/gcr-certificate.c:1615 gcr/gcr-parser.c:331
 msgid "Certificate"
 msgstr "प्रमाणपत्र"
 
-#: gcr/gcr-certificate.c:1183 gcr/gcr-certificate.c:1188
+#: gcr/gcr-certificate.c:1341 gcr/gcr-certificate.c:1346
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gcr/gcr-certificate.c:1184
+#: gcr/gcr-certificate.c:1342
 msgid "Identity"
 msgstr "परिचय"
 
-#: gcr/gcr-certificate.c:1189
+#: gcr/gcr-certificate.c:1347
 msgid "Verified by"
 msgstr "यसद्वारा रूजु गर्नुहोस्"
 
-#: gcr/gcr-certificate.c:1195
+#: gcr/gcr-certificate.c:1353
 msgid "Expires"
 msgstr "म्याद समाप्त हुन्छ"
 
 #. The subject
-#: gcr/gcr-certificate.c:1203
+#: gcr/gcr-certificate.c:1361
 msgid "Subject Name"
 msgstr "विषय नाम"
 
 #. The Issuer
-#: gcr/gcr-certificate.c:1209
+#: gcr/gcr-certificate.c:1367
 msgid "Issuer Name"
 msgstr "जारीकर्ता नाम"
 
 #. The Issued Parameters
-#: gcr/gcr-certificate.c:1215
+#: gcr/gcr-certificate.c:1373
 msgid "Issued Certificate"
 msgstr "जारी गरिएको प्रमाणपत्र"
 
-#: gcr/gcr-certificate.c:1221
+#: gcr/gcr-certificate.c:1380
 msgid "Version"
 msgstr "संस्करण"
 
-#: gcr/gcr-certificate.c:1235
+#: gcr/gcr-certificate.c:1394
 msgid "Not Valid Before"
 msgstr "पहिले वैध छैन"
 
-#: gcr/gcr-certificate.c:1244
+#: gcr/gcr-certificate.c:1403
 msgid "Not Valid After"
 msgstr "पछि वैध हुदैन"
 
-#: gcr/gcr-certificate.c:1253
+#: gcr/gcr-certificate.c:1412
 msgid "Certificate Fingerprints"
 msgstr "प्रमाणपत्र औठाछापहरू"
 
 #. Public Key Info
-#: gcr/gcr-certificate.c:1263
+#: gcr/gcr-certificate.c:1422
 msgid "Public Key Info"
 msgstr "सार्वजनिक कुञ्जी जानकारि"
 
 #. Signature
-#: gcr/gcr-certificate.c:1280 gcr/gcr-certificate.c:1291
+#: gcr/gcr-certificate.c:1441 gcr/gcr-certificate.c:1452
 msgid "Signature"
 msgstr "हस्ताक्षर"
 
-#: gcr/gcr-certificate.c:1283
+#: gcr/gcr-certificate.c:1444
 msgid "Signature Algorithm"
 msgstr "हस्ताक्षर अल्गोरिदम"
 
-#: gcr/gcr-certificate.c:1287
+#: gcr/gcr-certificate.c:1448
 msgid "Signature Parameters"
 msgstr "हस्ताक्षर परामितिहरू"
-
-#: gcr/gcr-certificate-extensions.c:190
-msgid "Other Name"
-msgstr "अन्य नाम"
-
-#: gcr/gcr-certificate-extensions.c:200
-msgid "XMPP Addr"
-msgstr "XMPP ठेगाना"
-
-#: gcr/gcr-certificate-extensions.c:204
-msgid "DNS SRV"
-msgstr "DNS SRV"
-
-#: gcr/gcr-certificate-extensions.c:216
-msgid "Email"
-msgstr "इमेल"
-
-#: gcr/gcr-certificate-extensions.c:224
-msgid "DNS"
-msgstr "DNS"
-
-#: gcr/gcr-certificate-extensions.c:232
-msgid "X400 Address"
-msgstr "X400 ठेगाना"
-
-#: gcr/gcr-certificate-extensions.c:239
-msgid "Directory Name"
-msgstr "डाइरेक्टरी नाम"
-
-#: gcr/gcr-certificate-extensions.c:247
-msgid "EDI Party Name"
-msgstr "EDI पार्टीको नाम"
-
-#: gcr/gcr-certificate-extensions.c:254
-msgid "URI"
-msgstr "URI"
-
-#: gcr/gcr-certificate-extensions.c:262
-msgid "IP Address"
-msgstr "आईपी ठेगाना"
-
-#: gcr/gcr-certificate-extensions.c:270
-msgid "Registered ID"
-msgstr "दर्ता आईडि"
 
 #: gcr/gcr-certificate-request.c:397
 #, c-format
 msgid "Unsupported key type for certificate request"
-msgstr "प्रमाणपत्र अनुरोधका लागि समर्थन नगरिएको कुञ्जी प्रकार ।"
+msgstr "प्रमाणपत्र अनुरोधका लागि समर्थन नगरिएको कुञ्जी प्रकार ।."
 
 #: gcr/gcr-certificate-request.c:484 gcr/gcr-certificate-request.c:568
 #, c-format
@@ -525,10 +692,6 @@ msgstr "GnuPG किरिङ्ग"
 msgid "GnuPG Keyring: %s"
 msgstr "GnuPG किरिङ्ग: %s"
 
-#: gcr/gcr-gnupg-key.c:141 gcr/gcr-parser.c:346
-msgid "PGP Key"
-msgstr "पीजीपी कुञ्जी"
-
 #: gcr/gcr-gnupg-process.c:867
 #, c-format
 msgid "Gnupg process exited with code: %d"
@@ -539,28 +702,32 @@ msgstr "गुप्तिकृत प्रक्रिया सङ्के�
 msgid "Gnupg process was terminated with signal: %d"
 msgstr "गुप्तिकृत प्रक्रिया सङ्केतद्वारा हटाइएको थियो: %d"
 
-#: gcr/gcr-gnupg-process.c:928 gcr/gcr-parser.c:2592 gcr/gcr-parser.c:3188
+#: gcr/gcr-gnupg-process.c:928 gcr/gcr-parser.c:1790 gcr/gcr-parser.c:2386
 #: gcr/gcr-system-prompt.c:916
 msgid "The operation was cancelled"
-msgstr "अनुरोध रद्द गरिएको थियो ।."
+msgstr "अनुरोध रद्द गरिएको थियो"
 
-#: gcr/gcr-parser.c:337
+#: gcr/gcr-parser.c:328
 msgid "Private Key"
 msgstr "निजी कुञ्जी"
 
-#: gcr/gcr-parser.c:349
+#: gcr/gcr-parser.c:337
+msgid "PGP Key"
+msgstr "पीजीपी कुञ्जी"
+
+#: gcr/gcr-parser.c:340
 msgid "Certificate Request"
 msgstr "प्रमाणपत्र अनुरोध"
 
-#: gcr/gcr-parser.c:2595
+#: gcr/gcr-parser.c:1793
 msgid "Unrecognized or unsupported data."
 msgstr "अज्ञात वा असमर्थित डाटा ।."
 
-#: gcr/gcr-parser.c:2598
+#: gcr/gcr-parser.c:1796
 msgid "Could not parse invalid or corrupted data."
-msgstr "अवैध वा बिग्रिएको डेटा पद वर्णन गर्न सकेन ।"
+msgstr "अवैध वा बिग्रिएको डेटा पद वर्णन गर्न सकेन ।."
 
-#: gcr/gcr-parser.c:2601
+#: gcr/gcr-parser.c:1799
 msgid "The data is locked"
 msgstr "डाटा ताल्चा लगाइयो"
 
@@ -603,7 +770,7 @@ msgstr "ताल्चा खोल्नुहोस्"
 msgid "The unlock password was incorrect"
 msgstr "ताल्चा खोल्ने पासवर्ड गलत थियो"
 
-#: gcr/gcr-ssh-agent-service.c:259
+#: gcr/gcr-ssh-agent-service.c:270
 msgid "Unnamed"
 msgstr "नामकरण नगरिएको"
 
@@ -611,11 +778,11 @@ msgstr "नामकरण नगरिएको"
 msgid "Enter your OpenSSH passphrase"
 msgstr "तपाईँको OpenSSH पासफ्रेज प्रविष्ट गर्नुहोस्"
 
-#: gcr/gcr-subject-public-key.c:407
+#: gcr/gcr-subject-public-key.c:413
 msgid "Unrecognized or unavailable attributes for key"
 msgstr "कुञ्जीका लागि अपरिचित वा अनुपलब्ध विशेषता"
 
-#: gcr/gcr-subject-public-key.c:493 gcr/gcr-subject-public-key.c:576
+#: gcr/gcr-subject-public-key.c:499 gcr/gcr-subject-public-key.c:582
 msgid "Couldn’t build public key"
 msgstr "सार्वजनिक कुञ्जी निर्माण गर्न सकेन"
 
@@ -687,9 +854,6 @@ msgstr "[file...]"
 #~ msgid "Could not display file"
 #~ msgstr "फाइल प्रदर्शन गर्न सकेन"
 
-#~ msgid "Reason"
-#~ msgstr "कारण"
-
 #, c-format
 #~ msgid "Cannot display a file of this type."
 #~ msgstr "यस प्रकारको फाइल प्रदर्शन गर्न सकिँदैन ।"
@@ -712,9 +876,6 @@ msgstr "[file...]"
 #~ msgctxt "capability"
 #~ msgid "Disabled"
 #~ msgstr "असक्षम"
-
-#~ msgid "Invalid"
-#~ msgstr "अवैध"
 
 #~ msgctxt "ownertrust"
 #~ msgid "Disabled"
@@ -834,9 +995,6 @@ msgstr "[file...]"
 #~ msgid "Subkey revocation signature"
 #~ msgstr "उपकुञ्जी खारेजी हस्ताक्षर"
 
-#~ msgid "Certification revocation signature"
-#~ msgstr "प्रमाणीकरण खारेजी हस्ताक्षर "
-
 #~ msgid "Timestamp signature"
 #~ msgstr "टाइमस्टाम्प हस्ताक्षर"
 
@@ -845,9 +1003,6 @@ msgstr "[file...]"
 
 #~ msgid "Class"
 #~ msgstr "वर्ग"
-
-#~ msgid "Local only"
-#~ msgstr "स्थानीय मात्र"
 
 #~ msgid "Exportable"
 #~ msgstr "निर्यात गर्न लायक"
@@ -960,9 +1115,6 @@ msgstr "[file...]"
 #~ msgid "Password cannot be blank"
 #~ msgstr "पासवर्ड खालि हुन सक्दैन"
 
-#~ msgid "Access Prompt"
-#~ msgstr "पहुँच प्रोम्प्ट"
-
 #~ msgid "Unlock access to passwords and other secrets"
 #~ msgstr "पासवर्ड र अन्य गोप्य मा पहुँच अनलक गर्नुहोस्"
 
@@ -984,9 +1136,6 @@ msgstr "[file...]"
 
 #~ msgid "_Save"
 #~ msgstr " बचत गर्नुहोस्"
-
-#~ msgid "Certificate files"
-#~ msgstr "प्रमाणपत्र फाइलहरू"
 
 #~ msgid "PEM files"
 #~ msgstr "PEM फाइल"

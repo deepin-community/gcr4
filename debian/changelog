@@ -1,3 +1,46 @@
+gcr4 (4.4.0.1-3) unstable; urgency=medium
+
+  [ Santiago Vila ]
+  * Add patch to disable a test that segfaults on some systems
+    (Closes: #1057562)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 12 Apr 2025 11:55:19 -0400
+
+gcr4 (4.4.0.1-2) unstable; urgency=medium
+
+  * Opt into Salsa CI
+  * Stop ignoring build test failures on s390x
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 21 Mar 2025 17:31:31 -0400
+
+gcr4 (4.4.0.1-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Alessandro Astone <alessandro.astone@canonical.com>  Thu, 20 Mar 2025 17:06:58 +0100
+
+gcr4 (4.3.91-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/libgcr-4-4.symbols: Add new symbols
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 10 Feb 2025 08:39:19 -0500
+
+gcr4 (4.3.90.3-1) unstable; urgency=medium
+
+  * New upstream release
+  * Bump minimum glib
+  * debian/libgcr-4-4.symbols: Update
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 17 Jan 2025 19:22:59 -0500
+
+gcr4 (4.3.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/libgcr-4-4.symbols: Add new symbols
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 14 Aug 2024 21:11:38 -0400
+
 gcr4 (4.2.0-6) unstable; urgency=medium
 
   [ Simon McVittie ]

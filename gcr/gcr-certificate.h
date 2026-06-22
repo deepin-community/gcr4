@@ -25,6 +25,9 @@
 #endif
 
 #include "gcr-types.h"
+#include "gcr-certificate-extension.h"
+#include "gcr-certificate-extension-list.h"
+#include "gcr-subject-public-key-info.h"
 
 #include <glib-object.h>
 #include <gio/gio.h>
@@ -102,10 +105,15 @@ GDateTime *         gcr_certificate_get_issued_date        (GcrCertificate *self
 
 GDateTime *         gcr_certificate_get_expiry_date        (GcrCertificate *self);
 
+gulong              gcr_certificate_get_version            (GcrCertificate *self);
+
 guchar*             gcr_certificate_get_serial_number      (GcrCertificate *self,
                                                             gsize *n_length);
 
 gchar*              gcr_certificate_get_serial_number_hex  (GcrCertificate *self);
+
+GcrSubjectPublicKeyInfo *
+                    gcr_certificate_get_public_key_info    (GcrCertificate *self);
 
 guint               gcr_certificate_get_key_size           (GcrCertificate *self);
 
@@ -121,6 +129,9 @@ gboolean            gcr_certificate_get_basic_constraints  (GcrCertificate *self
                                                             gint *path_len);
 
 GList*              gcr_certificate_get_interface_elements (GcrCertificate *self);
+
+GcrCertificateExtensionList *
+                    gcr_certificate_list_extensions        (GcrCertificate *self);
 
 void                gcr_certificate_mixin_emit_notify      (GcrCertificate *self);
 

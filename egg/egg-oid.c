@@ -165,6 +165,15 @@ static OidInfo oid_info[] = {
 	{ 0, "2.5.29.33", "policyMappings", N_("Policy mappings"), 0 },
 	{ 0, "2.5.29.34", "policyConstraints", N_("Policy constraints"), 0 },
 	{ 0, "2.5.29.35", "authorityKeyIdentifier", N_("Authority key identifier"), 0 },
+	{ 0, "2.5.29.37", "extendedKeyUsage", N_("Extended Key Usage"), 0 },
+
+	/* Certificate Policies */
+	{ 0, "2.23.140.1.1", NULL, N_("Extended Validation"), 0 },
+	{ 0, "1.3.6.1.5.5.7.2.1", NULL, N_("Certification Practices Statement"), 0 },
+
+	/* Authority Information Access (AIA) methods */
+	{ 0, "1.3.6.1.5.5.7.48.1", NULL, N_("Online Certificate Status Protocol (OCSP)"), 0 },
+	{ 0, "1.3.6.1.5.5.7.48.2", NULL, N_("Certification Authority Issuer"), 0 },
 
 	{ 0, NULL, NULL, NULL, FALSE }
 };

@@ -2,12 +2,20 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
 * Build-Depends-Package: libgcr-4-dev
  _gcr_callback_output_stream_get_type@Base 3.8.0
  _gcr_callback_output_stream_new@Base 3.8.0
- _gcr_certificate_extension_basic_constraints@Base 3.8.0
- _gcr_certificate_extension_extended_key_usage@Base 3.8.0
- _gcr_certificate_extension_find@Base 3.8.0
- _gcr_certificate_extension_key_usage@Base 3.8.0
- _gcr_certificate_extension_subject_alt_name@Base 3.8.0
- _gcr_certificate_extension_subject_key_identifier@Base 3.8.0
+ _gcr_certificate_extension_authority_info_access_parse@Base 4.3.91
+ _gcr_certificate_extension_authority_key_identifier_parse@Base 4.3.91
+ _gcr_certificate_extension_basic_constraints_parse@Base 4.3.90.3
+ _gcr_certificate_extension_certificate_policies_parse@Base 4.3.91
+ _gcr_certificate_extension_crl_distribution_points_parse@Base 4.3.91
+ _gcr_certificate_extension_extended_key_usage_parse@Base 4.3.90.3
+ _gcr_certificate_extension_generic_parse@Base 4.3.90.3
+ _gcr_certificate_extension_get_oid_as_quark@Base 4.3.90.3
+ _gcr_certificate_extension_key_usage_parse@Base 4.3.90.3
+ _gcr_certificate_extension_list_new_for_asn1@Base 4.3.90.3
+ _gcr_certificate_extension_parse@Base 4.3.90.3
+ _gcr_certificate_extension_set_oid@Base 4.3.90.3
+ _gcr_certificate_extension_subject_alt_name_parse@Base 4.3.90.3
+ _gcr_certificate_extension_subject_key_identifier_parse@Base 4.3.90.3
  _gcr_certificate_field_new_take_bytes@Base 4.0.0
  _gcr_certificate_field_new_take_value@Base 4.0.0
  _gcr_certificate_field_new_take_values@Base 4.0.0
@@ -57,7 +65,11 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  _gcr_dbus_prompter_proxy_new_sync@Base 3.8.0
  _gcr_dbus_prompter_skeleton_get_type@Base 3.8.0
  _gcr_dbus_prompter_skeleton_new@Base 3.8.0
- _gcr_general_names_free@Base 3.8.0
+ _gcr_enum_next_password@Base 4.3.0
+ _gcr_general_name_get_name_type@Base 4.3.90.3
+ _gcr_general_name_parse@Base 4.3.91
+ _gcr_general_names_parse@Base 4.3.91
+ _gcr_general_names_steal@Base 4.3.91
  _gcr_gnupg_importer_get_imported@Base 3.8.0
  _gcr_gnupg_importer_get_type@Base 3.8.0
  _gcr_gnupg_importer_new@Base 3.8.0
@@ -90,7 +102,11 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  _gcr_mock_prompt_get_type@Base 3.8.0
  _gcr_oid_alt_name_dns_srv_get_quark@Base 3.8.0
  _gcr_oid_alt_name_xmpp_addr_get_quark@Base 3.8.0
+ _gcr_oid_authority_info_access_get_quark@Base 4.3.91
+ _gcr_oid_authority_key_identifier_get_quark@Base 4.3.91
  _gcr_oid_basic_constraints_get_quark@Base 3.8.0
+ _gcr_oid_certificate_policies_get_quark@Base 4.3.91
+ _gcr_oid_crl_distribution_points_get_quark@Base 4.3.91
  _gcr_oid_ec_secp192r1_get_quark@Base 3.14.0
  _gcr_oid_ec_secp224r1_get_quark@Base 3.14.0
  _gcr_oid_ec_secp256r1_get_quark@Base 3.14.0
@@ -150,6 +166,31 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  _gcr_oid_subject_key_identifier_get_quark@Base 3.8.0
  _gcr_openpgp_parse@Base 3.8.0
  _gcr_openssh_pub_parse@Base 3.8.0
+ _gcr_parsed_parsing_block@Base 4.3.0
+ _gcr_parsed_parsing_object@Base 4.3.0
+ _gcr_parsed_set_asn1_element@Base 4.3.0
+ _gcr_parsed_set_asn1_number@Base 4.3.0
+ _gcr_parsed_set_asn1_structure@Base 4.3.0
+ _gcr_parsed_set_attribute@Base 4.3.0
+ _gcr_parsed_set_attribute_bytes@Base 4.3.0
+ _gcr_parsed_set_attributes@Base 4.3.0
+ _gcr_parsed_set_boolean_attribute@Base 4.3.0
+ _gcr_parsed_set_description@Base 4.3.0
+ _gcr_parsed_set_label@Base 4.3.0
+ _gcr_parsed_set_ulong_attribute@Base 4.3.0
+ _gcr_parser_fire_parsed@Base 4.3.0
+ _gcr_parser_handle_encrypted_pem@Base 4.3.0
+ _gcr_parser_handle_pkcs12_cert_bag@Base 4.3.0
+ _gcr_parser_handle_plain_pem@Base 4.3.0
+ _gcr_parser_parse_der_pkcs12@Base 4.3.0
+ _gcr_parser_parse_der_pkcs8_encrypted@Base 4.3.0
+ _gcr_parser_parse_der_pkcs8_plain@Base 4.3.0
+ _gcr_parser_parse_der_private_key_dsa@Base 4.3.0
+ _gcr_parser_parse_der_private_key_dsa_parts@Base 4.3.0
+ _gcr_parser_parse_der_private_key_ec@Base 4.3.0
+ _gcr_parser_parse_der_private_key_rsa@Base 4.3.0
+ _gcr_parser_pop_parsed@Base 4.3.0
+ _gcr_parser_push_parsed@Base 4.3.0
  _gcr_pkcs11_importer_get_queued@Base 3.8.0
  _gcr_pkcs11_importer_get_slot@Base 3.8.0
  _gcr_pkcs11_importer_get_type@Base 3.8.0
@@ -184,11 +225,16 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  _gcr_subject_public_key_attributes_size@Base 3.14.0
  _gcr_subject_public_key_calculate_size@Base 3.8.0
  _gcr_subject_public_key_for_attributes@Base 3.8.0
+ _gcr_subject_public_key_info_new@Base 4.3.90.3
  _gcr_subject_public_key_load@Base 3.8.0
  _gcr_subject_public_key_load_async@Base 3.8.0
  _gcr_subject_public_key_load_finish@Base 3.8.0
  _gcr_uninitialize_library@Base 3.8.0
  _gcr_util_parse_lines@Base 3.8.0
+ gcr_access_description_get_location@Base 4.3.91
+ gcr_access_description_get_method_name@Base 4.3.91
+ gcr_access_description_get_method_oid@Base 4.3.91
+ gcr_access_description_get_type@Base 4.3.91
  gcr_certificate_chain_add@Base 3.8.0
  gcr_certificate_chain_build@Base 3.8.0
  gcr_certificate_chain_build_async@Base 3.8.0
@@ -202,6 +248,38 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  gcr_certificate_chain_get_type@Base 3.8.0
  gcr_certificate_chain_new@Base 3.8.0
  gcr_certificate_chain_status_get_type@Base 3.8.0
+ gcr_certificate_extension_authority_info_access_get_description@Base 4.3.91
+ gcr_certificate_extension_authority_info_access_get_type@Base 4.3.91
+ gcr_certificate_extension_authority_key_identifier_get_authority_cert_issuer@Base 4.3.91
+ gcr_certificate_extension_authority_key_identifier_get_authority_cert_serial_number@Base 4.3.91
+ gcr_certificate_extension_authority_key_identifier_get_key_id@Base 4.3.91
+ gcr_certificate_extension_authority_key_identifier_get_type@Base 4.3.91
+ gcr_certificate_extension_basic_constraints_get_path_len_constraint@Base 4.3.90.3
+ gcr_certificate_extension_basic_constraints_get_type@Base 4.3.90.3
+ gcr_certificate_extension_basic_constraints_is_ca@Base 4.3.90.3
+ gcr_certificate_extension_certificate_policies_get_policy@Base 4.3.91
+ gcr_certificate_extension_certificate_policies_get_type@Base 4.3.91
+ gcr_certificate_extension_crl_distribution_points_get_distribution_point@Base 4.3.91
+ gcr_certificate_extension_crl_distribution_points_get_type@Base 4.3.91
+ gcr_certificate_extension_extended_key_usage_get_descriptions@Base 4.3.90.3
+ gcr_certificate_extension_extended_key_usage_get_oids@Base 4.3.90.3
+ gcr_certificate_extension_extended_key_usage_get_type@Base 4.3.90.3
+ gcr_certificate_extension_get_description@Base 4.3.90.3
+ gcr_certificate_extension_get_oid@Base 4.3.90.3
+ gcr_certificate_extension_get_type@Base 4.3.90.3
+ gcr_certificate_extension_get_value@Base 4.3.90.3
+ gcr_certificate_extension_is_critical@Base 4.3.90.3
+ gcr_certificate_extension_key_usage_get_descriptions@Base 4.3.90.3
+ gcr_certificate_extension_key_usage_get_type@Base 4.3.90.3
+ gcr_certificate_extension_key_usage_get_usages@Base 4.3.90.3
+ gcr_certificate_extension_list_find_by_oid@Base 4.3.90.3
+ gcr_certificate_extension_list_get_extension@Base 4.3.90.3
+ gcr_certificate_extension_list_get_type@Base 4.3.90.3
+ gcr_certificate_extension_parse_error_quark@Base 4.3.90.3
+ gcr_certificate_extension_subject_alt_name_get_name@Base 4.3.90.3
+ gcr_certificate_extension_subject_alt_name_get_type@Base 4.3.90.3
+ gcr_certificate_extension_subject_key_identifier_get_key_id@Base 4.3.90.3
+ gcr_certificate_extension_subject_key_identifier_get_type@Base 4.3.90.3
  gcr_certificate_field_get_label@Base 4.0.0
  gcr_certificate_field_get_section@Base 4.0.0
  gcr_certificate_field_get_type@Base 4.0.0
@@ -220,6 +298,7 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  gcr_certificate_get_issuer_part@Base 3.8.0
  gcr_certificate_get_issuer_raw@Base 3.8.0
  gcr_certificate_get_key_size@Base 3.8.0
+ gcr_certificate_get_public_key_info@Base 4.3.90.3
  gcr_certificate_get_serial_number@Base 3.8.0
  gcr_certificate_get_serial_number_hex@Base 3.8.0
  gcr_certificate_get_subject_cn@Base 3.8.0
@@ -228,10 +307,18 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  gcr_certificate_get_subject_part@Base 3.8.0
  gcr_certificate_get_subject_raw@Base 3.8.0
  gcr_certificate_get_type@Base 3.8.0
+ gcr_certificate_get_version@Base 4.3.0
  gcr_certificate_is_issuer@Base 3.8.0
+ gcr_certificate_list_extensions@Base 4.3.90.3
  gcr_certificate_mixin_class_init@Base 3.8.0
  gcr_certificate_mixin_emit_notify@Base 3.8.0
  gcr_certificate_mixin_get_property@Base 3.8.0
+ gcr_certificate_policy_get_name@Base 4.3.91
+ gcr_certificate_policy_get_oid@Base 4.3.91
+ gcr_certificate_policy_get_type@Base 4.3.91
+ gcr_certificate_policy_qualifier_get_name@Base 4.3.91
+ gcr_certificate_policy_qualifier_get_oid@Base 4.3.91
+ gcr_certificate_policy_qualifier_get_type@Base 4.3.91
  gcr_certificate_request_capable@Base 3.8.0
  gcr_certificate_request_capable_async@Base 3.8.0
  gcr_certificate_request_capable_finish@Base 3.8.0
@@ -253,8 +340,17 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  gcr_data_error_get_domain@Base 3.8.0
  gcr_data_error_get_type@Base 3.8.0
  gcr_data_format_get_type@Base 3.8.0
+ gcr_distribution_point_get_full_name@Base 4.3.91
+ gcr_distribution_point_get_relative_name_part@Base 4.3.91
+ gcr_distribution_point_get_type@Base 4.3.91
  gcr_fingerprint_from_attributes@Base 3.8.0
  gcr_fingerprint_from_subject_public_key_info@Base 3.8.0
+ gcr_general_name_get_description@Base 4.3.90.3
+ gcr_general_name_get_type@Base 4.3.90.3
+ gcr_general_name_get_value@Base 4.3.90.3
+ gcr_general_name_get_value_raw@Base 4.3.90.3
+ gcr_general_names_get_name@Base 4.3.91
+ gcr_general_names_get_type@Base 4.3.91
  gcr_import_interaction_get_type@Base 3.8.0
  gcr_import_interaction_supplement@Base 3.8.0
  gcr_import_interaction_supplement_async@Base 3.8.0
@@ -389,6 +485,14 @@ libgcr-4.so.4 libgcr-4-4 #MINVER#
  gcr_ssh_askpass_get_interaction@Base 3.28.0
  gcr_ssh_askpass_get_type@Base 3.28.0
  gcr_ssh_askpass_new@Base 3.28.0
+ gcr_subject_public_key_info_copy@Base 4.3.90.3
+ gcr_subject_public_key_info_free@Base 4.3.90.3
+ gcr_subject_public_key_info_get_algorithm_description@Base 4.3.90.3
+ gcr_subject_public_key_info_get_algorithm_oid@Base 4.3.90.3
+ gcr_subject_public_key_info_get_algorithm_parameters_raw@Base 4.3.90.3
+ gcr_subject_public_key_info_get_key@Base 4.3.90.3
+ gcr_subject_public_key_info_get_key_size@Base 4.3.90.3
+ gcr_subject_public_key_info_get_type@Base 4.3.90.3
  gcr_system_prompt_close@Base 3.8.0
  gcr_system_prompt_close_async@Base 3.8.0
  gcr_system_prompt_close_finish@Base 3.8.0
